@@ -1,0 +1,17 @@
+expression  : add
+            | expression add;
+
+add : mul
+    | add + mul
+    | add - mul
+    ;
+
+mul : cons
+    | mul * cons
+    | mul / cons
+    ;
+
+cons: NUM
+    | ( expression )
+
+NUM : <number>;
