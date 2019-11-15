@@ -1,9 +1,7 @@
-import js.Error;
-
 enum Token {
     EoF;
     Num(value: Int);
-    Nil;
+    Error(index:Int, message:String);
     Operator(token: String);
 }
 
@@ -27,7 +25,7 @@ class Tokenizer {
             tokens.push(
                 if ("0123456789".indexOf(this.code.charAt(this.index)) != -1) this.resolve_num()
                 else if ("+-/*%()".indexOf(this.code.charAt(this.index)) != -1) this.resolve_single_token()
-                else this.resolve_nil()
+                else this.resolve_error()
             );
         }
         tokens.push(EoF);
@@ -39,6 +37,7 @@ class Tokenizer {
 
         while (true) {
             var n = this.code.charCodeAt(this.index);
+            trace(n);
             if (48 <= n && n <= 57) {
                 res += String.fromCharCode(n);
                 this.index ++;
@@ -56,9 +55,8 @@ class Tokenizer {
         return Operator(n);
     }
 
-    private function resolve_nil(): Token {
+    private function resolve_error(): Token {
         this.index ++;
-        throw new Error("unknown token");
-        return Nil;
+        return Error(this.index, '知らないトークン');
     }
 }
