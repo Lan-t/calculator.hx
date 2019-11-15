@@ -5,8 +5,8 @@ import Calculator;
 
 class Main {
     public static function main() {
-        var code = "23 + 34 * 45 ";
-        var code2 = "(23 + 34) * 45";
+        var code = "23 + 34 * (10 / 2) ";
+        var code2 = "(23 + 34) * 5";
 
         var tokenizer = new Tokenizer(code);
         var tokens = tokenizer.tokenize();
