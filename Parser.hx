@@ -57,6 +57,9 @@ class Parser {
 				case Token.Operator(token) if (token == '/'):
 					this.index++;
 					node = BinaryOperator('/', node, this.cons());
+				case Token.Operator(token) if (token == '%'):
+					this.index++;
+					node = BinaryOperator('%', node, this.cons());
 				case _:
 					break;
 			}

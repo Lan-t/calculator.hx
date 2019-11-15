@@ -14,6 +14,8 @@ class Calculator {
 				Std.int(calculate(lhs) / calculate(rhs));
 			case BinaryOperator(token, lhs, rhs) if (token == '*'):
 				Std.int(calculate(lhs) * calculate(rhs));
+            case BinaryOperator(token, lhs, rhs) if (token == '%'):
+                calculate(lhs) % calculate(rhs);
             case Err(i, m):
                 throw new Error('Err.');
 			case _:

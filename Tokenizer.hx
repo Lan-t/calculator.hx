@@ -26,7 +26,7 @@ class Tokenizer {
             }
             tokens.push(
                 if ("0123456789".indexOf(this.code.charAt(this.index)) != -1) this.resolve_num()
-                else if ("+-/*()".indexOf(this.code.charAt(this.index)) != -1) this.resolve_single_token()
+                else if ("+-/*%()".indexOf(this.code.charAt(this.index)) != -1) this.resolve_single_token()
                 else this.resolve_nil()
             );
         }
