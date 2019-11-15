@@ -23,7 +23,7 @@ class Tokenizer {
             if (' \n\t\r'.indexOf(this.code.charAt(this.index)) != -1) {
                 this.index ++;
                 continue;
-            } 
+            }
             tokens.push(
                 if ("0123456789".indexOf(this.code.charAt(this.index)) != -1) this.resolve_num()
                 else if ("+-/*()".indexOf(this.code.charAt(this.index)) != -1) this.resolve_single_token()
@@ -35,9 +35,19 @@ class Tokenizer {
     }
 
     private function resolve_num(): Token {
-        var n = Std.parseInt(this.code.charAt(this.index));
-        this.index ++;
-        return (Num(n));
+        var res: String = '';
+
+        while (true) {
+            var n = this.code.charCodeAt(this.index);
+            if (48 <= n && n <= 57) {
+                res += String.fromCharCode(n);
+                this.index ++;
+            } else {
+                break;
+            }
+        }
+
+        return Num(Std.parseInt(res));
     }
 
     private function resolve_single_token(): Token {
