@@ -15,6 +15,7 @@ func_name(arg) = expsession;
 
 - 最初にmainが計算される。
 - 引数は０個か１個取れる。
+- if (条件) 真値 : 偽値
 
 example:
 
@@ -25,3 +26,11 @@ bbb(x) = x + 10;
 ```
 
 \>\> 40
+
+```
+factorial(x) = if (x) factorial(x-1)*x : 1;
+
+main() = factorial(10);
+```
+
+\>\> 3628800
