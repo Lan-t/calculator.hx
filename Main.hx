@@ -2,7 +2,7 @@ import Tokenizer;
 import Parser;
 import Calculator;
 import js.Browser;
-import js.html.InputElement;
+import js.html.TextAreaElement;
 
 
 class Main {
@@ -15,14 +15,15 @@ class Main {
 	}
 
 	private static function calc():Int {
-		var formulaDom = cast(Browser.document.getElementById('formula'), InputElement);
+		var formulaDom = cast(Browser.document.getElementById('formula'), TextAreaElement);
         var ansDom = Browser.document.getElementById('ans');
         var code = formulaDom.value;
 		var tokenizer = new Tokenizer(code);
 		var tokens = tokenizer.tokenize();
 		var parser = new Parser(tokens);
 		var node = parser.parse();
-		var ans = Calculator.calculate(node);
+		var calculator = new Calculator();
+		var ans = calculator.calculate(node);
         ansDom.innerText = Std.string(ans);
 		return ans;
 	}

@@ -2,6 +2,8 @@ import Tokenizer;
 import haxe.ds.Option;
 
 enum Node {
+	Definition(funcs:Array<Node>);
+	Func(name:String, v:Option<String>, exp:Node);
 	Num(value:Int);
 	UnaryOperator(Token:String, hs:Node);
 	BinaryOperator(Token:String, lhs:Node, rhs:Node);
@@ -19,7 +21,42 @@ class Parser {
 	}
 
 	public function parse() {
-		return this.expression();
+		return this.definition();
+	}
+
+	private function definition():Node {
+		var funcs = new Array<Node>();
+
+		while (!Type.enumEq(this.tokens[this.index], Token.EoF)) {
+			funcs.push(this.func());
+		}
+
+		return Definition(funcs);
+	}
+
+	private function func():Node {
+		var name:String;
+		var v:Option<String>;
+		var exp:Node;
+		try {
+			switch (this._ide()) {
+				case Some(s):
+					name = s;
+				case _:
+					throw 'no function name';
+			}
+			if (!this._ope_char('(')) throw 'no (';
+			v = this._ide();
+			if (!this._ope_char(')')) throw 'no )';
+			if (!this._ope_char('=')) throw 'no =';
+			exp = this.expression();
+			if (!this._ope_char(';')) throw 'no ;';
+		} catch (message:String) {
+			this.index ++;
+			return Err(this.index-1, message);
+		}
+
+		return Func(name, v, exp);
 	}
 
 	private function expression():Node {
@@ -99,7 +136,29 @@ class Parser {
 				this.index++;
 				Num(value);
 			case _:
-				return Err(this.index, '知らないトークン');
+				this.index ++;
+				return Err(this.index-1, '知らないトークン');
 		}
 	}
+
+	private function _ide():Option<String> {
+		return switch (this.tokens[this.index]) {
+			case Token.Ide(v):
+				this.index ++;
+				Some(v);
+			case _:
+				None;
+		}
+	}
+
+	private function _ope_char(op:String):Bool {
+		return switch (this.tokens[this.index]) {
+			case Token.Operator(token) if (token == op):
+				this.index ++;
+				true;
+			case _:
+				false;
+		}
+	}
+	
 }
