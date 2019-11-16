@@ -7,7 +7,7 @@ usage:
 ```sh
 $ haxe compile.hxml
 $ python -m http.server
-$ google-chrome localhost:8000/main.html
+$ google-chrome https://localhost:8000/main.html
 ```
 
 func_name(arg) = expsession;
