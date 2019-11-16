@@ -1,5 +1,5 @@
 import Parser;
-import python.Exceptions;
+import js.Error;
 
 
 class Calculator {
@@ -18,9 +18,9 @@ class Calculator {
             case BinaryOperator(token, lhs, rhs) if (token == '%'):
                 calculate(lhs) % calculate(rhs);
             case Err(i, m):
-                throw new ValueError('Err.');
+                throw new Error('Err.');
 			case _:
-				throw new ValueError('未実装');
+				throw new Error('未実装');
 		}
 	}
 }
