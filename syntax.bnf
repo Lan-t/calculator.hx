@@ -19,6 +19,7 @@ cons: call
     | ( expression )
 
 call: NUM
+    | <ide>
     | <ide> ( NUM ) 
 
 NUM : <number>;

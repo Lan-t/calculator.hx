@@ -5,6 +5,7 @@ enum Node {
 	Definition(funcs:Array<Node>);
 	Func(name:String, v:Option<String>, exp:Node);
 	Num(value:Int);
+	Var(name:String);
 	Call(name:String, v:Option<Node>);
 	UnaryOperator(Token:String, hs:Node);
 	BinaryOperator(Token:String, lhs:Node, rhs:Node);
@@ -138,14 +139,21 @@ class Parser {
 			case None:
 				return this.num();
 			case Some(name):
-			try {
-				if (!this._ope_char('(')) throw 'no (';
-				if (!this._ope_char(')')) throw 'no )';
-				return Call(name, None);
-			} catch (message:String) {
-				this.index ++;
-				return Err(this.index-1, message);
-			}
+				try {
+					var exp:Node;
+					if (!this._ope_char('(')) throw 0;
+					if (this._ope_char(')'))
+						return Call(name, None); 
+					else
+						exp = this.expression();
+						if (!this._ope_char(')')) throw 'no )'
+						else return Call(name, Some(exp));
+				} catch (_:Int) {
+					return Var(name);
+				} catch (message:String) {
+					this.index ++;
+					return Err(this.index-1, message);
+				}
 		}
 	}
 
