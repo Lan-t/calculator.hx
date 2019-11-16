@@ -24,6 +24,10 @@ class Calculator {
 				0;
 			case Num(value):
 				value;
+			case Call(name, v):
+				var f = this.funcs.get(name);
+				if (f == null) throw new Error('unknown function');
+				else this.calculate(f);
 			case BinaryOperator(token, lhs, rhs) if (token == '+'):
 				calculate(lhs) + calculate(rhs);
 			case BinaryOperator(token, lhs, rhs) if (token == '-'):
