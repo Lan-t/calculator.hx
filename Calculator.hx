@@ -28,11 +28,15 @@ class Calculator {
 			case Func(name, v, exp):
 				this.funcs.set(name, {v:v, exp:exp});
 				0;
+			case If(cond, lhs, rhs):
+				var c = this.calculate(cond);
+				if (c != 0) this.calculate(lhs);
+				else this.calculate(rhs);
 			case Num(value):
 				value;
 			case Var(name):
 				var v = this.vars.get(name);
-				if (v == null) throw new Error('unknown variable');
+				if (v == null) {trace(this.vars);throw new Error('unknown variable');}
 				else v;
 			case Call(name, v):
 				var f = this.funcs.get(name);
@@ -61,6 +65,7 @@ class Calculator {
 			case None:
 				ret = this.calculate(func_context.exp);
 			case Some(v):
+				var tmp = this.vars.get(v);
 				this.vars.set(v, switch (arg) {
 					case None:
 						throw new Error('no arg');
@@ -68,7 +73,8 @@ class Calculator {
 						this.calculate(a);
 				});
 				ret = this.calculate(func_context.exp);
-				this.vars.remove(v);
+				if (tmp == null) this.vars.remove(v);
+				else this.vars.set(v, tmp);
 		}
 		return ret;
 	}

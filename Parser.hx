@@ -4,12 +4,12 @@ import haxe.ds.Option;
 enum Node {
 	Definition(funcs:Array<Node>);
 	Func(name:String, v:Option<String>, exp:Node);
+	If(cond:Node, lhs:Node, rhs:Node);
 	Num(value:Int);
 	Var(name:String);
 	Call(name:String, v:Option<Node>);
 	UnaryOperator(Token:String, hs:Node);
 	BinaryOperator(Token:String, lhs:Node, rhs:Node);
-	EoF;
 	Err(index:Int, message:String);
 }
 
@@ -62,9 +62,25 @@ class Parser {
 	}
 
 	private function expression():Node {
-		var node = this.add();
+		var node = this.if_();
 
 		return node;
+	}
+
+	private function if_():Node {
+		return switch (this.tokens[this.index]) {
+			case If:
+				this.index ++;
+				if (!this._ope_char('(')) throw 'no (';
+				var exp = this.expression();
+				if (!this._ope_char(')')) throw 'no )';
+				var lhs = this.expression();
+				if (!this._ope_char(':')) throw 'no :';
+				var rhs = this.expression();
+				If(exp, lhs, rhs);
+			case _:
+				this.add();
+		}
 	}
 
 	private function add():Node {

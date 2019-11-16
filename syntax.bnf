@@ -1,9 +1,15 @@
 definition  : function
             | definition function
+            ;
 
 function    : <identifier> ( ide ) = expression ;
+            ;
 
-expression  : add;
+expression  : if ;
+            ;
+
+if  : add
+    |  'if' ( expression ) expression : expression
 
 add : mul
     | add + mul
@@ -20,6 +26,6 @@ cons: call
 
 call: NUM
     | <ide>
-    | <ide> ( NUM ) 
+    | <ide> ( expression ) 
 
 NUM : <number>;

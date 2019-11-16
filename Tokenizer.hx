@@ -2,6 +2,7 @@ enum Token {
 	EoF;
 	Ide(value:String);
 	Num(value:Int);
+	If;
 	Error(index:Int, message:String);
 	Operator(token:String);
 }
@@ -22,10 +23,15 @@ class Tokenizer {
 				this.index++;
 				continue;
 			}
+			if (this.code.substr(this.index, 2) == 'if') {
+				tokens.push(If);
+				this.index += 2;
+				continue;
+			}
 			tokens.push(
                 if ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_".indexOf(this.code.charAt(this.index)) != -1) this.resolve_ide()
                 else if ("0123456789".indexOf(this.code.charAt(this.index)) != -1) this.resolve_num()
-                else if ("+-/*%=;()".indexOf(this.code.charAt(this.index)) != -1) this.resolve_single_token() 
+                else if ("+-/*%=;:()".indexOf(this.code.charAt(this.index)) != -1) this.resolve_single_token() 
                 else this.resolve_error());
 		}
 		tokens.push(EoF);
